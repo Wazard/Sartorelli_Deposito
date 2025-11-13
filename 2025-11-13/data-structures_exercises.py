@@ -1,3 +1,8 @@
+#----
+# EXERCISE 1-2
+#----
+
+
 def words_to_int(s):
     ones = {"zero": 0, "one": 1, "two": 2, "three": 3, "four": 4,"five": 5, "six": 6, "seven": 7, "eight": 8, "nine": 9}
     teens = {"ten": 10, "eleven": 11, "twelve": 12, "thirteen": 13,"fourteen": 14, "fifteen": 15, "sixteen": 16,"seventeen": 17, "eighteen": 18, "nineteen": 19}
@@ -48,3 +53,15 @@ else:
     response += "odd: "
 print(response)
 print(num)
+
+
+
+#----
+# EXERCISE 3
+#----
+
+n:int = input("Insert the quantity of numbers to print: ")
+step:int = input("Insert the step on which calculate them: ")
+
+for i in range(0,int(n),int(step)):
+    print(i)
