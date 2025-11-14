@@ -15,7 +15,6 @@ def guess_the_number():
 # EXERCISE 2, 3
 #----
 
-
 def fib(n):
     if n==0:
         return 0
