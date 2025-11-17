@@ -1,5 +1,5 @@
-import random
-
+import __init__
+from Utilities import functions
 # Prompt user to input 10 valid integers
 def user_input() -> list[int]:
     tmp_list = []
@@ -13,20 +13,12 @@ def user_input() -> list[int]:
             print("NaN")  # Not a number
     return tmp_list
 
-# Generate a list of 10 random integers between 1 and 100
-def generate_random_integers() -> list[int]:
-    return [random.randint(1, 100) for _ in range(10)]
-
-# Calculate the average of a list of numbers
-def get_average(my_list: list[int]) -> float:
-    return sum(my_list) / len(my_list) if my_list else 0.0
-
 # Find the day with the highest average sales
 def best_selling_day(dictionary: dict[int, list[int]]) -> tuple[int, float]:
     maximum = 0.0
     max_day = None
     for d, v in dictionary.items():
-        curr_average = get_average(v)
+        curr_average = functions.get_average(v)
         if curr_average >= maximum:
             maximum = curr_average
             max_day = d
@@ -34,9 +26,15 @@ def best_selling_day(dictionary: dict[int, list[int]]) -> tuple[int, float]:
 
 def run_tests():
 
+    my_list = []
+    my_list += functions.generate_random_integers()
+    
+    '''for testing purposes, i'm not using the input'''
+    #my_list += user_input() 
+    
     # Test: get_average
-    avg1 = get_average(generate_random_integers())
-    avg2 = get_average([])
+    avg1 = functions.get_average(my_list)
+    avg2 = functions.get_average([])
 
     print(avg1)
     print(avg2) # output 0.0
