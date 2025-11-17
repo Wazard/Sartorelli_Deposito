@@ -12,7 +12,6 @@ class Punto:
     def distance_from_origin(self): # returns distance from (0,0)
         return math.sqrt(self.x**2+self.y**2)
 
-
 class Libro:
     def __init__(self, title , author, page_amount): # constructor with title, author and page amount
         self.title = title
