@@ -1,13 +1,13 @@
 class Animal:
-    def __init__(self, name: str, age: int, sound: str = "Generic sound"):
+    def __init__(self, name: str, age: int, sound: str = "Generic sound"): # accepts respectively string int and string (last being optional)
         self.name = name
         self.age = age
         self.sound = sound
 
-    def make_sound(self):
+    def make_sound(self): # plays sound
         return f"{self.sound}!"
 
-    def describe_peculiarity(self):
+    def describe_peculiarity(self): # describes peculiarity
         return "Is alive"
 
     def __repr__(self):
@@ -15,7 +15,7 @@ class Animal:
 
 
 class Lion(Animal):
-    def __init__(self, name: str, age: int, hunt_method: str, sound = "Roar"):
+    def __init__(self, name: str, age: int, hunt_method: str, sound = "Roar"): # accepts father's inputs + str for hunting method
         super().__init__(name, age)
         self.hunt_method = hunt_method
 
@@ -24,9 +24,9 @@ class Lion(Animal):
 
 
 class Penguin(Animal):
-    def __init__(self, name: str, age: int, swim_speed: float, sound = "Honk"):
+    def __init__(self, name: str, age: int, swim_speed: float, sound = "Honk"): # accepts father's inputs + int for speed
         super().__init__(name, age, sound)
-        self.swim_speed = swim_speed  # meters per second
+        self.swim_speed = swim_speed
 
     def describe_peculiarity(self):
         return f"{self.name} swims at {self.swim_speed} m/s"
