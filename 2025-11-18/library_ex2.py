@@ -69,7 +69,7 @@ library.add_book(book4)
 library.add_book(book5)
 
 print("Initial catalogue:")
-print(library.catalogue)
+print(library.get_catalogue())
 
 print("\nSearch by title 'Refactoring':")
 print(library.search_by_title("Refactoring"))
