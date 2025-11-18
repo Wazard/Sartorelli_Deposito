@@ -12,14 +12,14 @@ class Book:
         return f"{self.title} book, written by {self.author}, isbn={self.isbn}"
 
     def __repr__(self):
-            return self.description()
+        return self.description()
 
 
 class Library:
     def __init__(self):
         self.catalogue = []  # catalogue will store Book objects
 
-    def add_book(self, book):
+    def add_book(self, book: Book): 
         self.catalogue.append(book)
 
     def remove_book(self, book=None, isbn=None):
