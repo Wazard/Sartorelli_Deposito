@@ -24,7 +24,7 @@ class Workshop:
         raise ValueError(f"No ticket found with ID {ticket_id}")
 
     def get_open_tickets(self) -> list[RefurbishTicket]:
-        return [t for t in self.__tickets if t.get_status() != TicketStatus.OPEN]
+        return [t for t in self.__tickets if t.get_status() == TicketStatus.OPEN]
 
     def get_closed_tickets(self) -> list[RefurbishTicket]:
         return [t for t in self.__tickets if t.get_status() == TicketStatus.CLOSED]

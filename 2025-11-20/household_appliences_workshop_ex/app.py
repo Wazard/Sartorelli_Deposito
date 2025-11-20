@@ -32,7 +32,7 @@ def main():
     ]
 
     # --- Create Tickets ---
-    tickets = [RefurbishTicket(appliance, TicketStatus=TicketStatus.OPEN) for appliance in appliances]
+    tickets = [RefurbishTicket(appliance, status=TicketStatus.OPEN) for appliance in appliances]
 
     # --- Create Workshop ---
     workshop = Workshop("Central Repair Hub")

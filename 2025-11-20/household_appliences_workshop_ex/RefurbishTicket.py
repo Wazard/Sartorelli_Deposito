@@ -9,7 +9,7 @@ class TicketStatus(Enum):
 class RefurbishTicket:
     __counter = 0  # static counter for unique IDs
 
-    def __init__(self, appliance: Appliance, status: TicketStatus = TicketStatus.OPEN):
+    def __init__(self, appliance: Appliance, status = TicketStatus.OPEN):
         # Generate unique 16-char ticket_id
         RefurbishTicket.__counter += 1
         raw_id = f"{appliance.get_make()}-{appliance.get_model()}-{RefurbishTicket.__counter}"
@@ -19,7 +19,7 @@ class RefurbishTicket:
         self.__appliance = appliance
 
         # Status validation
-        self.__status = TicketStatus
+        self.__status = status
         self.__notes = ""
 
     # --- Getters ---
