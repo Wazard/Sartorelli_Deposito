@@ -2,7 +2,6 @@ import hashlib
 from enum import Enum
 from Appliance import Appliance
 
-
 class TicketStatus(Enum):
     OPEN = "Open"
     CLOSED = "Closed"

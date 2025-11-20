@@ -19,15 +19,15 @@ class Workshop:
     def close_ticket(self, ticket_id: str) -> None:
         for ticket in self.__tickets:
             if ticket.get_ticket_id() == ticket_id:
-                ticket.set_status(TicketStatus.CLOSED.value)
+                ticket.set_status(TicketStatus.CLOSED)
                 return
         raise ValueError(f"No ticket found with ID {ticket_id}")
 
     def get_open_tickets(self) -> list[RefurbishTicket]:
-        return [t for t in self.__tickets if t.get_status() == TicketStatus.OPEN.value]
+        return [t for t in self.__tickets if t.get_status() != TicketStatus.OPEN]
 
     def get_closed_tickets(self) -> list[RefurbishTicket]:
-        return [t for t in self.__tickets if t.get_status() == TicketStatus.CLOSED.value]
+        return [t for t in self.__tickets if t.get_status() == TicketStatus.CLOSED]
 
     def get_total_costs(self) -> float:
         return round(sum(t.total_cost_estimate() for t in self.__tickets), 2)
