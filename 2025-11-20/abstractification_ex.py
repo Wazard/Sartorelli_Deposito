@@ -1,5 +1,10 @@
 from abc import ABC, abstractmethod
 
+class Payable(ABC):
+    @abstractmethod
+    def generate_payslip(self) -> str:
+        pass
+
 class Employee(ABC):
     def __init__(self, name: str, surname: str, base_RAL: float):
         self._name = name
@@ -15,7 +20,7 @@ class Employee(ABC):
         pass
 
 
-class PermanentEmployee(Employee):
+class PermanentEmployee(Employee, Payable):
     def __init__(self, name: str, surname: str, base_RAL: float, bonus_rate: float = 0.1):
         super().__init__(name, surname, base_RAL)
         self._bonus_rate = bonus_rate
@@ -26,9 +31,12 @@ class PermanentEmployee(Employee):
     
     def description(self) -> str:
         return f"Permanent Employee: {self._name} {self._surname}, Base RAL: €{self._RAL}, Bonus Rate: {self._bonus_rate*100:.0f}%"
+    
+    def generate_payslip(self) -> str:
+        return f"Payslip for {self._name} {self._surname}: €{self.calculate_salary()}"
 
 
-class CommissionEmployee(Employee):
+class CommissionEmployee(Employee, Payable):
     def __init__(self, name: str, surname: str, base_RAL: float, sales_amount: float, commission_rate: float):
         super().__init__(name, surname, base_RAL)
         self._sales_amount = sales_amount
@@ -43,11 +51,12 @@ class CommissionEmployee(Employee):
                 f"Base RAL: €{self._RAL}, Sales: €{self._sales_amount}, "
                 f"Commission Rate: {self._commission_rate*100:.0f}%")
 
+    def generate_payslip(self) -> str:
+        return f"Payslip for {self._name} {self._surname}: €{self.calculate_salary()}"
+
 
 emp1 = PermanentEmployee("Alice", "Rossi", 30000, bonus_rate=0.2)
-print(emp1.description())
-print("Annual Salary:", emp1.calculate_salary())
+print(emp1.generate_payslip())
 
-emp2 = CommissionEmployee("Bob", "Bianchi", 20000, sales_amount=150000, commission_rate=0.15)
-print(emp2.description())
-print("Annual Salary:", emp2.calculate_salary())
+emp2 = CommissionEmployee("Bob", "Bianchi", 20000, 150000, 0.15)
+print(emp2.generate_payslip())
