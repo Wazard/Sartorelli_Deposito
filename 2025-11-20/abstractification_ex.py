@@ -21,7 +21,7 @@ class Employee(ABC):
 
 
 class PermanentEmployee(Employee, Payable):
-    def __init__(self, name: str, surname: str, base_RAL: float, bonus_rate: float = 0.1):
+    def __init__(self, name: str, surname: str, base_RAL: float, bonus_rate: float = 0.0):
         super().__init__(name, surname, base_RAL)
         self._bonus_rate = bonus_rate
     
