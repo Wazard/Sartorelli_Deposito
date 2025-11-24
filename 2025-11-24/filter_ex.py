@@ -8,6 +8,4 @@ result = list(
 # condition: arr[i]+arr[i+1]>arr[i+2]
 # then each filtered index is mapped to arr
 
-
-
 print(result)
