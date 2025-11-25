@@ -25,7 +25,7 @@ def multiply(matrix1:np.ndarray, matrix2:np.ndarray) -> np.ndarray:
     return matrix1 * matrix2
 
 def get_mat_average(matrix:np.ndarray) -> float:
-    return matrix.mean()
+    return matrix.ave()
 
 def get_determinant(matrix:np.ndarray) -> float:
     if matrix.shape[0] != matrix.shape[1]:

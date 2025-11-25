@@ -1,0 +1,12 @@
+#dropZone {
+    border: 2px dashed #888;
+    padding: 40px;
+    text-align: center;
+    margin: 20px auto;
+    width: 300px;
+    cursor: pointer;
+}
+#dropZone.dragover {
+    border-color: #4CAF50;
+    background-color: #f0fff0;
+}
