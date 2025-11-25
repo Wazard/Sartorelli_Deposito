@@ -1,5 +1,4 @@
 import numpy as np
-import os
 
 # Generate arrays
 arr = np.linspace(start=0, stop=10, num=50)
@@ -25,7 +24,7 @@ print(output)
 # Ask user how to save
 choice = input("Do you want to overwrite (o) or append (a) to results.txt? [o/a]: ").strip().lower()
 
-filename = "./results.txt"
+filename = "2025-11-25/results.txt"
 mode = "w" if choice == "o" else "a"
 
 # Write data
