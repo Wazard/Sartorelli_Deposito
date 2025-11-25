@@ -43,7 +43,7 @@ def main():
         stop = int(input("insert stop number: "))
         size = int(input("insert array size: "))
         generate_arrays(start, stop, size)
-        if input("Continue? [y/n]").strip().lower() == n:
+        if input("Continue? [y/n]").strip().lower() == 'n':
             return
 
 main()
