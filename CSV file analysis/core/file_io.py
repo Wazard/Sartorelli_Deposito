@@ -1,8 +1,9 @@
 import csv
 import numpy as np
 import warnings
+import customtkinter as ctk
 
-def get_from_csv(path: str) -> np.ndarray:
+def load_csv():
     """
     Load a CSV file and return its contents as a NumPy array.
     
@@ -16,6 +17,12 @@ def get_from_csv(path: str) -> np.ndarray:
     np.ndarray
         Matrix if multiple rows, array if single row.
     """
+    path = ctk.filedialog.askopenfilename(
+        filetypes=[("CSV files", "*.csv")],
+        title="Select a CSV file"
+    )
+    if not path:
+        return None
     try:
         with open(path, newline='') as f:
             reader = csv.reader(f)
@@ -25,6 +32,8 @@ def get_from_csv(path: str) -> np.ndarray:
         warnings.warn(f"Could not read file: {e}")
         return None
     
+    split_path = path.split('/')
+    file_name:str = split_path[-1]
     f.close()
 
     arr = np.array(data)
@@ -33,8 +42,11 @@ def get_from_csv(path: str) -> np.ndarray:
         return None
     
     if arr.shape[0] == 1:
-        return arr.flatten()
-    return arr
+        arr_type = "array"
+        return arr.flatten(), arr_type, file_name
+    
+    arr_type:str = "matrix"
+    return arr,arr_type,file_name
 
 def load_to_csv(path: str, data: np.ndarray) -> bool:
     """
