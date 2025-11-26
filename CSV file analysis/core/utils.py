@@ -44,6 +44,20 @@ class MyFrame(ctk.CTkFrame):
         self.data = new_matrix
         pass
 
+class MyPopup(ctk.CTkToplevel):
+    def __init__(self, master):
+        super().__init__(master)
+
+        # Bring on top and force focus
+        self.lift()         # bring on top
+        self.focus_force()  # grab keyboard focus
+        self.grab_set()     # block interaction with parent
+        self.attributes("-topmost", True)
+    
+    def confirm(self):
+        # Close after 1 second
+        self.after(1000, self.destroy)
+
 
 def reshape(matrix:np.ndarray, row, col) -> np.ndarray:
     return matrix.reshape(row, col)

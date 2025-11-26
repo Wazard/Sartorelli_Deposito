@@ -1,9 +1,10 @@
 import customtkinter as ctk
 import numpy as np
-from core import utils, array_oops
+from core.utils import MyFrame, UnsortedArrayError
+from core import array_oops
 
 
-class ArrayFrame(utils.MyFrame):
+class ArrayFrame(MyFrame):
     def __init__(self, master, data):
         super().__init__(master, data)
 
@@ -58,7 +59,7 @@ class ArrayFrame(utils.MyFrame):
         try:
             idx = array_oops.arr_search_sorted(self.data, value)
             self.update_result(oop="search_sorted", result=f"value {value} at index {idx}")
-        except utils.UnsortedArrayError as e:
+        except UnsortedArrayError as e:
             self.update_result(oop="search_sorted", result=str(e))
 
     # Override

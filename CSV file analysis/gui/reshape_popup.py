@@ -1,6 +1,7 @@
 import customtkinter as ctk
+from core.utils import MyPopup
 
-class ReshapePopup(ctk.CTkToplevel):
+class ReshapePopup(MyPopup):
     def __init__(self, master, data, on_reshaped):
         super().__init__(master)
         #attributes
@@ -9,12 +10,6 @@ class ReshapePopup(ctk.CTkToplevel):
         self.row_label = ctk.CTkLabel(self, text="Rows:")
         self.col_label = ctk.CTkLabel(self, text="Cols:")
         self.confirm_btn = ctk.CTkButton(self, text="Confirm", command=self.confirm)
-    
-        # Bring on top and force focus
-        self.lift()         # bring on top
-        self.focus_force()  # grab keyboard focus
-        self.grab_set()     # block interaction with parent
-        self.attributes("-topmost", True)
 
         # TopLetel config
         self.title("Reshape")
@@ -52,5 +47,4 @@ class ReshapePopup(ctk.CTkToplevel):
         # Call back to parent with reshaped array
         self.on_reshaped(reshaped)
 
-        # Close after 1 second
-        self.after(1000, self.destroy)
+        super().confirm()
