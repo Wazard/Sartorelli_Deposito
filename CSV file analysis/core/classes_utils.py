@@ -45,16 +45,44 @@ class MyPopup(ctk.CTkToplevel):
     def __init__(self, master):
         super().__init__(master)
 
+        self.title("Popup")
+
         # Bring on top and force focus
-        self.lift()         # bring on top
-        self.focus_force()  # grab keyboard focus
-        self.grab_set()     # block interaction with parent
+        self.lift()
+        self.focus_force()
+        self.grab_set()
         self.attributes("-topmost", True)
-    
+
+    def center_on_master(self):
+        self.update_idletasks()
+
+        # Master absolute position on screen
+        master_x = self.master.winfo_rootx()
+        master_y = self.master.winfo_rooty()
+        master_w = self.master.winfo_width()
+        master_h = self.master.winfo_height()
+
+        # Popup size
+        popup_w = self.winfo_width()
+        popup_h = self.winfo_height()
+
+        # Compute centered position
+        x = master_x + (master_w // 2) - (popup_w // 2)
+        y = master_y + (master_h // 2) - (popup_h // 2)
+
+        # Apply position (keep size the same, only move)
+        self.geometry(f"+{x}+{y}")
+
     def confirm(self, timer=500):
-        # Close after 1 second
         print("self destroying popup")
         self.after(timer, self.destroy)
+    
+    def top_level_config(self, title:str, geometry:str):
+        # TopLetel config
+        self.title(title)
+        self.geometry(geometry)
+        self.resizable(False, False)
+        self.center_on_master()
 
 
 def reshape(matrix:np.ndarray, row, col) -> np.ndarray:

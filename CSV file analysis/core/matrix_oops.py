@@ -32,3 +32,8 @@ def mat_norm(matrix:np.ndarray) -> float:
 
 def mat_covariant(matrix:np.ndarray) -> np.ndarray:
     return np.cov(matrix, rowvar=False)
+
+
+
+def flatten(matrix:np.ndarray) -> np.ndarray:
+    return matrix.flatten()

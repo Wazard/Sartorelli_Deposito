@@ -32,7 +32,9 @@ class MatrixFrame(classes_utils.MyFrame):
         self.tabview.configure(width=400, height=200)
         axis_tab_frame.pack(expand=True, anchor='center', pady=10)
         algebra_tab_frame.pack(expand=True, anchor='center', pady=10)
-    
+
+        self.flatten_btn = ctk.CTkButton(self, text="Flatten", command=self.flatten)
+        self.flatten_btn.pack(side="bottom", pady=20, anchor='s')
     
     # Methods
     def show_sum_by_col(self):
@@ -64,6 +66,15 @@ class MatrixFrame(classes_utils.MyFrame):
     def show_mat_covariant(self):
         self.update_result(oop="Covariant:\n", result=np.array2string(matrix_oops.mat_covariant(self.data)))
     
+    def flatten(self):
+        # Remove current frame
+        self.pack_forget()
+        flattened_matrix = matrix_oops.flatten(self.data)
+        # Show ArrayFrame instead
+        from gui.array_frame import ArrayFrame
+        frame = ArrayFrame(self.master, flattened_matrix, app=self.app)
+        frame.pack(expand=True, fill="both")
+
     def reshape(self):
         ReshapePopup(self, self.data, self.on_reshaped)
 

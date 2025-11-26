@@ -12,9 +12,7 @@ class ReshapePopup(MyPopup):
         self.confirm_btn = ctk.CTkButton(self, text="Confirm", command=self.confirm)
 
         # TopLetel config
-        self.title("Reshape")
-        self.geometry("300x200")
-        self.resizable(False, False)
+        self.top_level_config("Reshape", "300x200")
 
         # row settings and pack
         self.rows_entry = ctk.CTkEntry(self)

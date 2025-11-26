@@ -11,9 +11,7 @@ class DotProductPopup(MyPopup):
         self.selected_path = None
 
         # TopLevel config
-        self.title("Load CSV")
-        self.geometry("350x150")
-        self.resizable(False, False)
+        self.top_level_config("Load CSV", "350x150")
 
         # Label
         self.path_label = ctk.CTkLabel(self, text="CSV Path:")

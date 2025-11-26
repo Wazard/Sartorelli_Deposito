@@ -75,5 +75,5 @@ class ArrayFrame(MyFrame):
         self.pack_forget()
         # Show MatrixFrame instead
         from gui.matrix_frame import MatrixFrame
-        frame = MatrixFrame(self.master, new_matrix)
+        frame = MatrixFrame(self.master, new_matrix, app=self.app)
         frame.pack(expand=True, fill="both")

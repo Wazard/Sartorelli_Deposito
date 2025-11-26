@@ -9,9 +9,7 @@ class SearchSortedPopup(MyPopup):
         self.on_confirm = on_confirm  # callback to parent
 
         # TopLevel config
-        self.title("Chose Number")
-        self.geometry("350x150")
-        self.resizable(False, False)
+        self.top_level_config("Number Selector", "350x150")
 
         # Label
         self.path_label = ctk.CTkLabel(self, text="Select a number for Search Sorted")
@@ -33,6 +31,7 @@ class SearchSortedPopup(MyPopup):
     def confirm(self):
         try:
             search_number = int(self.search_entry.get())
+            self.info_label.configure(text="Number selected correctly!", text_color='green')
         except Exception as e:
             self.info_label.configure(text=f"Error: {e}", text_color="red")
             return
