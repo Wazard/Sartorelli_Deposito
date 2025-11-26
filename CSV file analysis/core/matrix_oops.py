@@ -18,9 +18,10 @@ def mean_by_row(matrix:np.ndarray) ->np.ndarray:
 ### Algebrical oops
 
 def mat_dot(master, matrix:np.ndarray, matrix1:np.ndarray) -> np.ndarray:
-    if matrix.shape[1] != matrix.shape[0]:
+    if matrix.shape[1] != matrix1.shape[0]:
         raise OddShapeMatrixError(master, f"Incompatible shapes for dot product: {matrix.shape} and {matrix1.shape}. "
-            "Number of columns in the first must equal number of rows in the second.")
+            "Number of columns in the first must equal number of rows in the second."
+            "Try the Reshape button.")
     return matrix@matrix1
 
 def mat_transpose(matrix:np.ndarray) -> np.ndarray:

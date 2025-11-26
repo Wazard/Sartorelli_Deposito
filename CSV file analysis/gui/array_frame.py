@@ -1,6 +1,7 @@
 import customtkinter as ctk
 import numpy as np
 from gui.reshape_popup import ReshapePopup
+from gui.search_sorted_popup import SearchSortedPopup
 from core.classes_utils import MyFrame
 from core import array_oops
 
@@ -56,9 +57,14 @@ class ArrayFrame(MyFrame):
     def show_percentile(self):
         self.update_result(oop="Percentile = ", result=str(array_oops.arr_percentile(self.data)))
 
-    def show_search_sorted(self, value:float):
-        idx = array_oops.arr_search_sorted(self.master,self.data, value)
-        self.update_result(oop="search_sorted", result=f"value {value} at index {idx}")
+    def show_search_sorted(self):
+
+        def followup(value:float):
+            idx = array_oops.arr_search_sorted(self.master,self.data, value)
+            self.update_result(oop="search_sorted", result=f"value {value} at index {idx}")
+
+        SearchSortedPopup(self,followup)
+
 
     def reshape(self):
         ReshapePopup(self, self.data, self.on_reshaped)

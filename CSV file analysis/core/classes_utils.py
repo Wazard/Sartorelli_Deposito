@@ -51,7 +51,7 @@ class MyPopup(ctk.CTkToplevel):
         self.grab_set()     # block interaction with parent
         self.attributes("-topmost", True)
     
-    def confirm(self, timer=1000):
+    def confirm(self, timer=500):
         # Close after 1 second
         print("self destroying popup")
         self.after(timer, self.destroy)
