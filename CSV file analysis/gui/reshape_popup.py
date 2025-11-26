@@ -1,5 +1,5 @@
 import customtkinter as ctk
-from core.utils import MyPopup
+from core.classes_utils import MyPopup
 
 class ReshapePopup(MyPopup):
     def __init__(self, master, data, on_reshaped):
@@ -45,6 +45,5 @@ class ReshapePopup(MyPopup):
         self.info_label.configure(text="correctly reshaped!", text_color="green")
 
         # Call back to parent with reshaped array
-        self.on_reshaped(reshaped)
-
         super().confirm()
+        self.on_reshaped(reshaped)

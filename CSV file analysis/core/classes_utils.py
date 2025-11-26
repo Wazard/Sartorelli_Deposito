@@ -1,29 +1,24 @@
 import customtkinter as ctk
 import numpy as np
-from gui.reshape_popup import ReshapePopup
+from abc import ABC, abstractmethod
 
-class UnsortedArrayError(Exception):
-    pass
-
-class MyFrame(ctk.CTkFrame):
-    def __init__(self, master, data):
+class MyFrame(ctk.CTkFrame, ABC):
+    def __init__(self, master, data, app):
         super().__init__(master)
         
         #Variables
+        self.app = app
         self.data = data
         self.info_label = ctk.CTkLabel(self, text="")
         self.back_btn = ctk.CTkButton(self, text="Back", command=self.go_back)
         self.reshape_btn = ctk.CTkButton(self, text="Reshape", command=self.reshape)
         self.result_label = ctk.CTkLabel(self, text="result will show here")
         self.tabview = ctk.CTkTabview(self, height=200)
-    
-        #self.button_frame = ctk.CTkFrame(self)
 
         # Packs
         self.info_label.pack(pady=5)
         self.result_label.pack(pady=10)
         self.tabview.pack(expand=True, fill='both', pady=10, padx=10)
-        #self.button_frame.pack(expand=True)
         self.back_btn.pack(side="left", padx=60, pady=20, anchor='s')
         self.reshape_btn.pack(side="right", padx=40, pady=20, anchor='s')
 
@@ -32,13 +27,15 @@ class MyFrame(ctk.CTkFrame):
     
     def go_back(self):
         self.pack_forget()
-        self.master.show_main(self.data)
+        self.app.show_main(self.data)
     
     def update_result(self, oop:str, result:str):
         self.result_label.configure(text=f"{oop.capitalize()} {result}")
+        self.app.auto_resize()
     
+    @abstractmethod
     def reshape(self):
-        ReshapePopup(self, self.data, self.on_reshaped)
+        pass
 
     def on_reshaped(self, new_matrix):
         self.data = new_matrix
@@ -54,9 +51,10 @@ class MyPopup(ctk.CTkToplevel):
         self.grab_set()     # block interaction with parent
         self.attributes("-topmost", True)
     
-    def confirm(self):
+    def confirm(self, timer=1000):
         # Close after 1 second
-        self.after(1000, self.destroy)
+        print("self destroying popup")
+        self.after(timer, self.destroy)
 
 
 def reshape(matrix:np.ndarray, row, col) -> np.ndarray:

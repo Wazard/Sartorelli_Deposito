@@ -1,10 +1,13 @@
 import customtkinter as ctk
 import numpy as np
-from core import utils, matrix_oops
+from gui.reshape_popup import ReshapePopup
+from gui.dot_product_popup import DotProductPopup
+from core import classes_utils, matrix_oops
 
-class MatrixFrame(utils.MyFrame):
-    def __init__(self, master, data):
-        super().__init__(master, data)
+
+class MatrixFrame(classes_utils.MyFrame):
+    def __init__(self, master, data, app):
+        super().__init__(master, data, app)
 
         # Create Tabs
         axis_tab = self.tabview.add("Axis Analysis")
@@ -19,7 +22,7 @@ class MatrixFrame(utils.MyFrame):
         ctk.CTkButton(axis_tab_frame, text="Mean by Row", command=self.show_mean_by_row).grid(row=1, column=1, padx=10, pady=10)
 
         # Algebraical operations buttons
-        ctk.CTkButton(algebra_tab_frame, text="Dot Product", command=lambda: self.show_mat_dot(self.data)).grid(row=0, column=0, padx=10, pady=10)
+        ctk.CTkButton(algebra_tab_frame, text="Dot Product", command=self.show_mat_dot).grid(row=0, column=0, padx=10, pady=10)
         ctk.CTkButton(algebra_tab_frame, text="Transpose", command=self.show_mat_transpose).grid(row=0, column=1, padx=10, pady=10)
         ctk.CTkButton(algebra_tab_frame, text="Norm", command=self.show_mat_norm).grid(row=1, column=0, padx=10, pady=10)
         ctk.CTkButton(algebra_tab_frame, text="Covariant", command=self.show_mat_covariant).grid(row=1, column=1, padx=10, pady=10)
@@ -44,9 +47,13 @@ class MatrixFrame(utils.MyFrame):
     def show_mean_by_row(self):
         self.update_result(oop="Mean by rows = ", result=np.array2string(matrix_oops.mean_by_row(self.data)))
 
-    def show_mat_dot(self, matrix1:np.ndarray):
-        result = matrix_oops.mat_dot(self.data, matrix1)
-        self.update_result(oop="Dot result:\n", result=np.array2string(result))
+    def show_mat_dot(self):
+
+        def followup(matrix1:np.ndarray):
+            result = matrix_oops.mat_dot(self.master, self.data, matrix1)
+            self.update_result(oop="Dot result:\n", result=np.array2string(result))
+        
+        DotProductPopup(self, followup)
 
     def show_mat_transpose(self):
         self.update_result(oop="Transposition:\n", result=np.array2string(matrix_oops.mat_transpose(self.data)))
@@ -57,6 +64,9 @@ class MatrixFrame(utils.MyFrame):
     def show_mat_covariant(self):
         self.update_result(oop="Covariant:\n", result=np.array2string(matrix_oops.mat_covariant(self.data)))
     
+    def reshape(self):
+        ReshapePopup(self, self.data, self.on_reshaped)
+
     def on_reshaped(self, new_matrix):
         super().on_reshaped(new_matrix)
         self.info_label.configure(text=f"Matrix loaded:\n{np.array2string(self.data)}")

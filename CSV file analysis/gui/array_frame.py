@@ -1,12 +1,13 @@
 import customtkinter as ctk
 import numpy as np
-from core.utils import MyFrame, UnsortedArrayError
+from gui.reshape_popup import ReshapePopup
+from core.classes_utils import MyFrame
 from core import array_oops
 
 
 class ArrayFrame(MyFrame):
-    def __init__(self, master, data):
-        super().__init__(master, data)
+    def __init__(self, master, data, app):
+        super().__init__(master, data, app)
 
         # Create Tabs and inner Frames
         basic_tab = self.tabview.add("Basic Analysis")
@@ -56,12 +57,12 @@ class ArrayFrame(MyFrame):
         self.update_result(oop="Percentile = ", result=str(array_oops.arr_percentile(self.data)))
 
     def show_search_sorted(self, value:float):
-        try:
-            idx = array_oops.arr_search_sorted(self.data, value)
-            self.update_result(oop="search_sorted", result=f"value {value} at index {idx}")
-        except UnsortedArrayError as e:
-            self.update_result(oop="search_sorted", result=str(e))
+        idx = array_oops.arr_search_sorted(self.master,self.data, value)
+        self.update_result(oop="search_sorted", result=f"value {value} at index {idx}")
 
+    def reshape(self):
+        ReshapePopup(self, self.data, self.on_reshaped)
+    
     # Override
     def on_reshaped(self, new_matrix):
         # Remove current frame

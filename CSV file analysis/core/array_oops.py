@@ -1,5 +1,5 @@
 import numpy as np
-from core import utils
+from core.custom_errors import UnsortedArrayError
 
 ## Base Statistics
 
@@ -27,7 +27,7 @@ def arr_max_idx(arr:np.ndarray) -> int:
 def arr_percentile(arr:np.ndarray) -> float:
     return np.percentile(arr, 50)
 
-def arr_search_sorted(arr:np.ndarray, value:float):
+def arr_search_sorted(master, arr:np.ndarray, value:float):
     if not np.all(arr[:-1] <= arr[1:]):
-        raise utils.UnsortedArrayError("Array is not sorted")
+        raise UnsortedArrayError(master,"Array is not sorted")
     return np.searchsorted(arr, value)

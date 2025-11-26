@@ -1,5 +1,5 @@
 import numpy as np
-
+from core.custom_errors import OddShapeMatrixError
 ### Axis analysis
 
 def sum_by_col(matrix:np.ndarray, axis=0) -> np.ndarray:
@@ -17,7 +17,10 @@ def mean_by_row(matrix:np.ndarray) ->np.ndarray:
 
 ### Algebrical oops
 
-def mat_dot(matrix:np.ndarray, matrix1:np.ndarray) -> np.ndarray:
+def mat_dot(master, matrix:np.ndarray, matrix1:np.ndarray) -> np.ndarray:
+    if matrix.shape[1] != matrix.shape[0]:
+        raise OddShapeMatrixError(master, f"Incompatible shapes for dot product: {matrix.shape} and {matrix1.shape}. "
+            "Number of columns in the first must equal number of rows in the second.")
     return matrix@matrix1
 
 def mat_transpose(matrix:np.ndarray) -> np.ndarray:
