@@ -15,7 +15,7 @@ class App(ctk.CTk):
         self.arr_type = None
 
         self.title("CSV Loader")
-        self.geometry("500x300")
+        self.geometry("500x400")
         self.show_main()
 
     # methods
