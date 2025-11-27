@@ -42,19 +42,30 @@ def generate_sales_data(n: int = 300, seed: int = 42) -> pd.DataFrame:
         nan_indices = np.random.choice(df.index, size=int(0.1*n), replace=False)
         df.loc[nan_indices, col] = np.nan
 
-    # Add computed column: Total = Quantity × UnitPrice × (1 - Discount)
-    df["Total"] = df["Quantity"] * df["UnitPrice"] * (1 - df["Discount"])
+    # Add computed column: Total Sales = Quantity × UnitPrice × (1 - Discount)
+    df["Total Sales"] = df["Quantity"] * df["UnitPrice"] * (1 - df["Discount"])
 
     return df
 
 class DataHandler(BaseDataHandler):
 
-    def get_sales_by_product(self) -> pd.Series:
-        return self.df.groupby('Product')['Sales'].sum()
+    def try_get_sales_by_product(self) -> tuple[bool, any]:
+        return self.try_get_groupby('Product', 'Sales')
 
     def add_total_sales(self) -> bool | tuple[bool, Exception]:
         return self.try_add_col('Total Sales', lambda row: row['Quantity']*row['Price'])
     
-    
+    def try_filter_sales_greater_than(self, n:float) -> tuple[bool, any]:
+        try:
+            new_df = self.df[self.df['Total Sales']>n]
+        except Exception as e:
+            return False, e
+        return True, new_df
+
+    def try_order_by_sales(self) -> tuple[bool, any]:
+        return self.try_order_by(cols='Total Sales')
+
+    def try_get_sales_by_city(self) -> tuple[bool, any]:
+        return self.try_get_groupby('City','Total Sales')
 
 

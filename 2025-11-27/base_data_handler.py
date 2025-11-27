@@ -9,45 +9,59 @@ class BaseDataHandler():
         if not success:
             print(e)
     
-    def try_update_df(self, df) -> bool | tuple[bool, any]:
+    def get_lines(self, amount=5) -> pd.DataFrame:
+        return self.df.head(amount) if amount > 0 else self.df.tail(amount)
+    
+    def try_get_groupby(self, target_col: str | list[str], col:str) -> tuple[bool, any]:
+        try:
+            tmp_df = self.df.groupby(by=target_col)[col]
+        except Exception as e:
+            return False, e
+        return True, tmp_df
+
+    def try_update_df(self, df) -> tuple[bool, any]:
         try:
             if df is not None:
                 self.df = df
             else:
                 self.df = pd.read_csv(self.file_path)
         except Exception as e:
-            return False,e
+            return False, e
+        return True, None
+    
+    def try_order_by(self, cols:str | list[str], ascending:bool | list[bool]=True) -> tuple[bool, any]:
+        try:
+            self.df = self.df.sort_values(by=cols, ascending=ascending)
+        except Exception as e:
+            return False, e
         return True, None
 
-    def get_lines(self, amount=5) -> pd.DataFrame:
-        return self.df.head(amount) if amount > 0 else self.df.tail(amount)
-
-    def try_fill_nan(self, use_mean:bool = True) -> bool | tuple[bool, Exception]:
+    def try_fill_nan(self, use_mean:bool = True) -> tuple[bool, any]:
         try:
             self.df = self.df.fillna(0 if use_mean else self.df.mean(numeric_only=True))
         except Exception as e:
             return False, e
-        return True
+        return True, None
     
-    def try_add_col(self, target_col:str, criteria, axis:int=1) -> bool | tuple[bool, Exception]:
+    def try_add_col(self, target_col:str, criteria, axis:int=1) -> tuple[bool, any]:
         try:
             self.df[target_col] = self.df.apply(criteria, axis=axis)
         except Exception as e:
             return False, e
-        return True
+        return True, None
     
-    def try_remove_duplicates(self) -> bool | tuple[bool, Exception]:
+    def try_remove_duplicates(self) -> tuple[bool, any]:
         try:
             self.df = self.df.drop_duplicates()
         except Exception as e:
             return False, e
-        return True
+        return True, None
     
-    def try_save(self) -> bool | tuple[bool, Exception]:
+    def try_save(self) -> tuple[bool, any]:
         try:
             new_file_path = self.file_path.replace('.csv', '_new.csv')
             self.df.to_csv(new_file_path)
         except Exception as e:
             return False, e
-        return True
+        return True, None
     
