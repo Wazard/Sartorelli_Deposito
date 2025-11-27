@@ -31,7 +31,7 @@ class BaseDataHandler():
     
     def try_order_by(self, cols:str | list[str], ascending:bool | list[bool]=True) -> tuple[bool, any]:
         try:
-            self.df = self.df.sort_values(by=cols, ascending=ascending)
+            self.df = self.df.sort_values(by=cols, ascending=ascending).reset_index()
         except Exception as e:
             return False, e
         return True, None

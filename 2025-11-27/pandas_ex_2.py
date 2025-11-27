@@ -6,7 +6,7 @@ from base_data_handler import BaseDataHandler
 import pandas as pd
 import numpy as np
 
-def generate_sales_data(n: int = 300, seed: int = 42) -> pd.DataFrame:
+def generate_sales_data(n: int = 50, seed: int = 42) -> pd.DataFrame:
     """
     Generate a synthetic sales dataset with n rows.
     Includes NaN values in Quantity and UnitPrice (~10%).
@@ -50,10 +50,10 @@ def generate_sales_data(n: int = 300, seed: int = 42) -> pd.DataFrame:
 class DataHandler(BaseDataHandler):
 
     def try_get_sales_by_product(self) -> tuple[bool, any]:
-        return self.try_get_groupby('Product', 'Sales')
+        return self.try_get_groupby('Product', 'Total Sales')
 
     def add_total_sales(self) -> bool | tuple[bool, Exception]:
-        return self.try_add_col('Total Sales', lambda row: row['Quantity']*row['Price'])
+        return self.try_add_col('Total Sales', lambda row: row['Quantity']*row['UnitPrice'])
     
     def try_filter_sales_greater_than(self, n:float) -> tuple[bool, any]:
         try:
@@ -63,9 +63,58 @@ class DataHandler(BaseDataHandler):
         return True, new_df
 
     def try_order_by_sales(self) -> tuple[bool, any]:
-        return self.try_order_by(cols='Total Sales')
+        return self.try_order_by(cols='Total Sales', ascending=False)
 
     def try_get_sales_by_city(self) -> tuple[bool, any]:
         return self.try_get_groupby('City','Total Sales')
 
+# --- Create a synthetic sales dataset ---
+df = pd.DataFrame(generate_sales_data())
+
+# --- Use DataHandler ---
+handler = DataHandler(df=df)
+
+# 1. Preview first rows
+print("Initial dataset:")
+print(handler.get_lines())
+
+# 2. Add a computed column: Total Sales
+success, err = handler.add_total_sales()
+if not success:
+    print("Error adding Total Sales:", err)
+
+print("\nDataset with Total Sales:")
+print(handler.get_lines())
+
+# 3. Filter rows where Total Sales > 5000
+success, result = handler.try_filter_sales_greater_than(5000)
+if success:
+    print("\nSales greater than 5000:")
+    print(result)
+else:
+    print("Error filtering:", result)
+
+# 4. Order by Total Sales
+success, err = handler.try_order_by_sales()
+if not success:
+    print("Error ordering:", err)
+
+print("\nOrdered by Total Sales:")
+print(handler.get_lines())
+
+# 5. Group by Product
+success, grouped = handler.try_get_sales_by_product()
+if success:
+    print("\nGrouped by Product (Total Sales sum):")
+    print(grouped.sum())   # aggregate example
+else:
+    print("Error grouping:", grouped)
+
+# 6. Group by City
+success, grouped = handler.try_get_sales_by_city()
+if success:
+    print("\nGrouped by City (Total Sales sum):")
+    print(grouped.sum())
+else:
+    print("Error grouping:", grouped)
 
