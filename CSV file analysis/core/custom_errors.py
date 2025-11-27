@@ -17,17 +17,27 @@ class ErrorPopup(MyPopup):
 
 # --- Custom Exceptions ---
 class BaseAppError(Exception):
-    def __init__(self, master, message: str):
+    def __init__(self, master, message: str | None = None):
         super().__init__(message)
         # Show popup immediately
         ErrorPopup(master, message)
 
 class UnsortedArrayError(BaseAppError):
-    def __init__(self, master, message=None):
+    def __init__(self, master, message = None):
         msg = message or "Array must be sorted before operation."
         super().__init__(master, msg)
 
 class OddShapeMatrixError(BaseAppError):
-    def __init__(self, master, message=None):
+    def __init__(self, master, message = None):
         msg = message or "Matrix shape is incompatible"
+        super().__init__(master, msg)
+
+class CsvIOError(BaseAppError):
+    def __init__(self, master, message = None):
+        msg = message or "There was an error handling the Csv"
+        super().__init__(master, msg)
+
+class DbRelatedError(BaseAppError):
+    def __init__(self, master, message = None):
+        msg = message or "There was an error regarding the database"
         super().__init__(master, msg)

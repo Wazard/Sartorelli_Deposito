@@ -1,5 +1,5 @@
 import customtkinter as ctk
-from core import file_io as IO
+from core.data_manager import DataManager
 from gui import matrix_frame, array_frame
 import numpy as np
 
@@ -13,6 +13,7 @@ class App(ctk.CTk):
         self.data = None
         self.file_name = None
         self.arr_type = None
+        self.dm = DataManager("./data.db")
 
         self.title("CSV Loader")
         self.geometry(min_size)
@@ -55,7 +56,7 @@ class App(ctk.CTk):
             self.file_name = self.selected_path.split('/')[-1]
             self.info_label.configure(text=f"Selected: {self.file_name}", text_color='green')
 
-        arr, arr_type = IO.load_csv(self.selected_path)
+        arr, arr_type = self.dm.load_csv(self.selected_path)
 
         if arr is None:
             self.info_label.configure(text="No file loaded or error", text_color="red")

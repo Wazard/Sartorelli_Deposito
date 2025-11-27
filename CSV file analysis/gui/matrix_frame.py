@@ -55,7 +55,7 @@ class MatrixFrame(classes_utils.MyFrame):
             result = matrix_oops.mat_dot(self.master, self.data, matrix1)
             self.update_result(oop="Dot result:\n", result=np.array2string(result))
         
-        DotProductPopup(self, followup)
+        DotProductPopup(self, self.app.dm, followup)
 
     def show_mat_transpose(self):
         self.update_result(oop="Transposition:\n", result=np.array2string(matrix_oops.mat_transpose(self.data)))

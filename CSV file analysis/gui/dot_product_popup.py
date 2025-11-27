@@ -1,13 +1,14 @@
 import customtkinter as ctk
 from core.classes_utils import MyPopup
-from core import file_io
+from core.data_manager import DataManager
 
 class DotProductPopup(MyPopup):
-    def __init__(self, master, on_confirm):
+    def __init__(self, master, data_manager:DataManager, on_confirm):
         super().__init__(master)
         # attributes
         self.on_confirm = on_confirm  # callback to parent
         self.selected_path = None
+        self.dm = data_manager
 
         # TopLevel config
         self.top_level_config("Load CSV", "350x150")
@@ -52,7 +53,7 @@ class DotProductPopup(MyPopup):
         self.info_label.configure(text="File accepted!", text_color="green")
 
         # Callback to parent with loaded matrix
-        matrix1, _ = file_io.load_csv(self.selected_path)
+        matrix1, _ = self.dm.load_csv(self.selected_path)
 
         super().confirm()
         self.on_confirm(matrix1)
