@@ -1,7 +1,6 @@
 import csv
 import numpy as np
 import warnings
-import customtkinter as ctk
 
 def load_csv(path:str):
     """

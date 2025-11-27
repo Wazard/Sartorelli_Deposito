@@ -4,7 +4,7 @@ from gui import matrix_frame, array_frame
 import numpy as np
 
 class App(ctk.CTk):
-    def __init__(self, max_size:str = "960x720", min_size:str = "640x480"):
+    def __init__(self, min_size:str = "640x480" , max_size:str = "960x720"):
         super().__init__()
         ctk.set_appearance_mode("System")
         ctk.set_default_color_theme("blue")

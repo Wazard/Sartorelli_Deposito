@@ -1,7 +1,6 @@
 import customtkinter as ctk
 from core.classes_utils import MyPopup
 from core import file_io
-import os
 
 class DotProductPopup(MyPopup):
     def __init__(self, master, on_confirm):
@@ -37,15 +36,12 @@ class DotProductPopup(MyPopup):
         )
         if path:
             self.selected_path = path
-            self.info_label.configure(text=f"Selected: {os.path.basename(path)}", text_color="green")
+            self.file_name = self.selected_path.split('/')[-1]
+            self.info_label.configure(text=f"Selected: {self.file_name}", text_color="green")
 
     def confirm(self):
         if not self.selected_path:
             self.info_label.configure(text="Error: No file selected", text_color="red")
-            return
-
-        if not os.path.isfile(self.selected_path):
-            self.info_label.configure(text="Error: File not found", text_color="red")
             return
 
         if not self.selected_path.lower().endswith(".csv"):
@@ -53,7 +49,7 @@ class DotProductPopup(MyPopup):
             return
 
         # Success
-        self.info_label.configure(text="CSV path accepted!", text_color="green")
+        self.info_label.configure(text="File accepted!", text_color="green")
 
         # Callback to parent with loaded matrix
         matrix1, _ = file_io.load_csv(self.selected_path)
