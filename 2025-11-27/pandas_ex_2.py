@@ -3,8 +3,6 @@ import numpy as np
 import __init__
 from base_data_handler import BaseDataHandler
 
-import pandas as pd
-import numpy as np
 
 def generate_sales_data(n: int = 50, seed: int = 42) -> pd.DataFrame:
     """

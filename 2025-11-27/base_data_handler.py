@@ -14,6 +14,7 @@ class BaseDataHandler():
         return self.__df
 
     def get_lines(self, amount=5) -> pd.DataFrame:
+        # returns rows from top or bottom like lists would 
         return self.df.head(amount) if amount > 0 else self.df.tail(amount)
 
     def print_dataframe(self):
@@ -75,3 +76,17 @@ class BaseDataHandler():
             return False, e
         return True, None
     
+    def try_drop_nan(self, cols:str|list[str]) -> tuple[bool, any]:
+        try:
+            self.__df.dropna(subset=cols)
+            self.__df.dropna(axis=1, how='all')
+        except Exception as e:
+            return False, e
+        return True, None
+    
+    def try_clamp_cols(self, cols:str|list[str], min_v:float=0, max_v:float=200) -> tuple[bool, any]:
+        try:
+            self.__df[cols] = self.df[cols].clip(min_v,max_v)
+        except Exception as e:
+            return False, e
+        return True, None
