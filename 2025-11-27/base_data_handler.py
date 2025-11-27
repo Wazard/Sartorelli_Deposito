@@ -14,7 +14,7 @@ class BaseDataHandler():
         return self.__df
 
     def get_lines(self, amount=5) -> pd.DataFrame:
-        # returns rows from top or bottom like lists would 
+        # returns rows from top or bottom like lists would
         return self.df.head(amount) if amount > 0 else self.df.tail(amount)
 
     def print_dataframe(self):
@@ -78,8 +78,8 @@ class BaseDataHandler():
     
     def try_drop_nan(self, cols:str|list[str]) -> tuple[bool, any]:
         try:
-            self.__df.dropna(subset=cols)
-            self.__df.dropna(axis=1, how='all')
+            self.__df = self.df.dropna(subset=cols)
+            self.__df = self.df.dropna(axis=1, how='all')
         except Exception as e:
             return False, e
         return True, None

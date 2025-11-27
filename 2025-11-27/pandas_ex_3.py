@@ -3,6 +3,32 @@ import numpy as np
 import __init__
 from base_data_handler import BaseDataHandler
 
+def create_random_clients(n: int = 100) -> pd.DataFrame:
+    """
+    Create a DataFrame with n random clients.
+    Columns: id_client, Age, Monthly Cost, Data Usage, Churn
+    Adds ~10% NaNs in each column.
+    """
+    np.random.seed(42)  # reproducibility
+
+    data = {
+        "id_client": np.arange(1, n+1),
+        "Age": np.random.randint(18, 70, size=n),                # ages between 18–70
+        "Monthly Cost": np.random.randint(20, 250, size=n),      # monthly cost between 20–250
+        "Data Usage": np.random.randint(1, 100, size=n),         # GB usage between 1–100
+        "Churn": np.random.choice([0, 1], size=n, p=[0.7, 0.3])  # 30% churn rate
+    }
+
+    df = pd.DataFrame(data)
+
+    # Inject ~10% NaNs per column
+    for col in df.columns:
+        nan_indices = np.random.choice(df.index, size=int(n * 0.1), replace=False)
+        df.loc[nan_indices, col] = np.nan
+
+    return df
+
+
 class DataHandler(BaseDataHandler):
 
     def try_clean_age(self) -> tuple[bool,any]:
@@ -74,4 +100,65 @@ class DataHandler(BaseDataHandler):
         return True, churn_rate
 
 
+# --- Sample dataset ---
+
+df = pd.DataFrame(create_random_clients())
+
+# --- Initialize handler ---
+handler = DataHandler(df=df)
+
+print("\n=== Original Data ===")
+print(handler.df)
+
+# --- Clean Age ---
+handler.try_clean_age()
+print("\n=== After Cleaning Age ===")
+print(handler.df)
+
+# --- Clamp Monthly Costs ---
+handler.try_clamp_monthly_costs(min_v=0, max_v=200)
+print("\n=== After Clamping Monthly Costs ===")
+print(handler.df)
+
+# --- Clamp Data Usage ---
+handler.try_clamp_data_usage(min_v=0, max_v=999)
+print("\n=== After Clamping Data Usage ===")
+print(handler.df)
+
+# --- Drop NaN in ID and Monthly Cost ---
+handler.try_drop_nan_id()
+print("\n=== After Dropping NaN in id_client & Monthly Cost ===")
+print(handler.df)
+
+# --- Add Cost per GB ---
+handler.try_add_cost_per_GB()
+print("\n=== After Adding Cost per GB ===")
+print(handler.df[["Monthly Cost", "Data Usage", "Cost per GB"]])
+
+# --- Add Age Group ---
+handler.try_add_age_group()
+print("\n=== After Adding Age Group ===")
+print(handler.df)
+
+# --- Add Cost Range ---
+handler.try_add_cost_range()
+print("\n=== After Adding Cost Range ===")
+print(handler.df)
+
+# --- Get Churn Rate by Age Group & Cost Range ---
+success, churn_rate = handler.try_get_churn_rate()
+if success:
+    print("\n=== Churn Rate by Age Group & Cost Range ===")
+    print(churn_rate)
+
+# --- Pivot Table Example ---
+pivot = handler.get_pivot(values="Monthly Cost", index="Age Group", columns="Cost Range")
+print("\n=== Pivot Table (Monthly Cost by Age Group & Cost Range) ===")
+print(pivot)
+
+# --- GroupBy Example ---
+success, grouped = handler.try_get_groupby("Age Group", "Monthly Cost")
+if success:
+    print("\n=== GroupBy (Average Monthly Cost per Age Group) ===")
+    print(grouped.mean())
 
