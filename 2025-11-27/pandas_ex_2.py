@@ -68,6 +68,9 @@ class DataHandler(BaseDataHandler):
     def try_get_sales_by_city(self) -> tuple[bool, any]:
         return self.try_get_groupby('City','Total Sales')
 
+    def get_total_sales_pivot(self) -> pd.DataFrame:
+        return self.get_pivot(values='Total Sales', index='Product')
+
 # --- Create a synthetic sales dataset ---
 df = pd.DataFrame(generate_sales_data())
 
@@ -76,7 +79,7 @@ handler = DataHandler(df=df)
 
 # 1. Preview first rows
 print("Initial dataset:")
-print(handler.get_lines())
+handler.print_dataframe()
 
 # 2. Add a computed column: Total Sales
 success, err = handler.add_total_sales()
@@ -105,7 +108,7 @@ print(handler.get_lines())
 # 5. Group by Product
 success, grouped = handler.try_get_sales_by_product()
 if success:
-    print("\nGrouped by Product (Total Sales sum):")
+    print("\nGrouped by Product:")
     print(grouped.sum())   # aggregate example
 else:
     print("Error grouping:", grouped)
@@ -113,8 +116,12 @@ else:
 # 6. Group by City
 success, grouped = handler.try_get_sales_by_city()
 if success:
-    print("\nGrouped by City (Total Sales sum):")
+    print("\nGrouped by City:")
     print(grouped.sum())
 else:
     print("Error grouping:", grouped)
 
+# 7. Pivot table
+result = handler.get_total_sales_pivot()
+print("\nPivot Table: mean sales per product")
+print(result)

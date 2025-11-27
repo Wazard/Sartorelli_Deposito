@@ -9,8 +9,18 @@ class BaseDataHandler():
         if not success:
             print(e)
     
+    @property
+    def df(self) -> pd.DataFrame:
+        return self.__df
+
     def get_lines(self, amount=5) -> pd.DataFrame:
         return self.df.head(amount) if amount > 0 else self.df.tail(amount)
+
+    def print_dataframe(self):
+        print(self.df)
+    
+    def get_pivot(self, values=None, index=None, columns=None, aggfunc:str="mean") -> pd.DataFrame:
+        return pd.pivot_table(self.df, values=values, index=index, columns=columns, aggfunc=aggfunc)
     
     def try_get_groupby(self, target_col: str | list[str], col:str) -> tuple[bool, any]:
         try:
@@ -22,37 +32,37 @@ class BaseDataHandler():
     def try_update_df(self, df) -> tuple[bool, any]:
         try:
             if df is not None:
-                self.df = df
+                self.__df = df
             else:
-                self.df = pd.read_csv(self.file_path)
+                self.__df = pd.read_csv(self.file_path)
         except Exception as e:
             return False, e
         return True, None
     
     def try_order_by(self, cols:str | list[str], ascending:bool | list[bool]=True) -> tuple[bool, any]:
         try:
-            self.df = self.df.sort_values(by=cols, ascending=ascending).reset_index()
+            self.__df = self.df.sort_values(by=cols, ascending=ascending).reset_index()
         except Exception as e:
             return False, e
         return True, None
 
     def try_fill_nan(self, use_mean:bool = True) -> tuple[bool, any]:
         try:
-            self.df = self.df.fillna(0 if use_mean else self.df.mean(numeric_only=True))
+            self.__df = self.df.fillna(0 if use_mean else self.df.mean(numeric_only=True))
         except Exception as e:
             return False, e
         return True, None
     
     def try_add_col(self, target_col:str, criteria, axis:int=1) -> tuple[bool, any]:
         try:
-            self.df[target_col] = self.df.apply(criteria, axis=axis)
+            self.__df[target_col] = self.df.apply(criteria, axis=axis)
         except Exception as e:
             return False, e
         return True, None
     
     def try_remove_duplicates(self) -> tuple[bool, any]:
         try:
-            self.df = self.df.drop_duplicates()
+            self.__df = self.df.drop_duplicates()
         except Exception as e:
             return False, e
         return True, None
