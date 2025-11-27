@@ -1,20 +1,10 @@
 import pandas as pd
 import numpy as np
 import __init__
+from base_data_handler import BaseDataHandler
 
 
-class DataHandler():
-    def __init__(self, path:str):
-        
-        self.file_path = path
-        
-        self.update_df()
-
-    def update_df(self) -> None:
-        self.df = pd.read_csv(self.file_path)
-    
-    def get_lines(self, amount=5) -> pd.DataFrame:
-        return self.df.head(amount) if amount > 0 else self.df.tail(amount)
+class DataHandler(BaseDataHandler):
     
     def print_data_type(self) -> None:
         self.df.info()
@@ -34,31 +24,12 @@ class DataHandler():
         df_numeric = self.df.select_dtypes(include=[np.number])
         return df_numeric.std()
 
-    def try_remove_duplicates(self) -> bool | tuple[bool, Exception]:
-        try:
-            self.df = self.df.drop_duplicates()
-        except Exception as e:
-            return False, e
-        return True
-
-    def try_add_age_category(self) -> bool | tuple[bool, Exception]:
-        try:
-            self.df['Age Category'] = ['Senior' if age > 65 else ('Adult' if age>18 else 'Young') for age in self.df['Age']]
-        except Exception as e:
-            return False, e
-        return True
-    
-    def try_save(self) -> bool | tuple[bool, Exception]:
-        try:
-            new_file_path = self.file_path.replace('.csv', '_new.csv')
-            self.df.to_csv(new_file_path)
-        except Exception as e:
-            return False, e
-        return True
+    def add_age_category(self) -> bool | tuple[bool, Exception]:
+        return self.try_add_col('Age Category', lambda row: 'Senior' if row['Age'] > 65 else ('Adult' if row['Age']>18 else 'Young'))
 
 
 # Initialize handler with file path
-handler = DataHandler("train.csv")
+handler = DataHandler("./train.csv")
 
 # Show first 3 rows
 print("First 3 rows:\n", handler.get_lines(3))
@@ -82,8 +53,12 @@ print("\nStandard deviations:\n", handler.get_numerical_cols_std())
 result = handler.try_remove_duplicates()
 print("\nRemove duplicates result:", result)
 
+# Fill Nan
+result = handler.try_fill_nan()
+print("\nFill Nan:", result)
+
 # Add age category
-result = handler.try_add_age_category()
+result = handler.add_age_category()
 print("\nAdd age category result:", result)
 print(handler.df)
 

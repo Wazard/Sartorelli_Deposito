@@ -1,2 +1,5 @@
-import sys, os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+import os
+import sys
+
+# Force program to start in its own directory
+os.chdir(os.path.dirname(os.path.abspath(sys.argv[0])))
