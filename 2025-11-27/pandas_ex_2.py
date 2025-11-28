@@ -45,7 +45,7 @@ def generate_sales_data(n: int = 50, seed: int = 42) -> pd.DataFrame:
 
     return df
 
-class DataHandler(BaseDataHandler):
+class SalesDataHandler(BaseDataHandler):
 
     def try_get_sales_by_product(self) -> tuple[bool, any]:
         return self.try_get_groupby('Product', 'Total Sales')
@@ -68,12 +68,12 @@ class DataHandler(BaseDataHandler):
 
     def get_total_sales_pivot(self) -> pd.DataFrame:
         return self.get_pivot(values='Total Sales', index='Product')
-
+""" 
 # --- Create a synthetic sales dataset ---
 df = pd.DataFrame(generate_sales_data())
 
 # --- Use DataHandler ---
-handler = DataHandler(df=df)
+handler = SalesDataHandler(df=df)
 
 # 1. Preview first rows
 print("Initial dataset:")
@@ -123,3 +123,4 @@ else:
 result = handler.get_total_sales_pivot()
 print("\nPivot Table: mean sales per product")
 print(result)
+"""
