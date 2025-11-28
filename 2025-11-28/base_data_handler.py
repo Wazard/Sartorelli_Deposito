@@ -117,10 +117,22 @@ class BaseDataHandler():
             return False, e
         return True, None
     
-    def try_clamp_cols(self, cols:str|list[str], lower_bounds:float=0, upper_bounds:float=200) -> tuple[bool, any]:
+    def try_clamp_cols(self, cols:str|list[str], lower_bounds:float=0, upper_bounds:float=200, use_og:bool = False) -> tuple[bool, any]:
         try:
-            self.__curr_df = self.og_df.copy()
-            self.__curr_df[cols] = self.og_df[cols].clip(lower_bounds,upper_bounds)
+            self.__curr_df[cols] = self.og_df[cols].clip(lower_bounds,upper_bounds) if use_og else self.__curr_df[cols].clip(lower_bounds,upper_bounds)
         except Exception as e:
             return False, e
         return True, None
+    
+    def df_norm(self, method:str="minmax") -> pd.DataFrame:
+        numeric_cols = self.df.select_dtypes(include='number').columns
+        df_norm = self.df.copy()
+        if method == "minmax":
+            df_norm[numeric_cols] = df_norm[numeric_cols].apply(
+                lambda x: (x - x.min()) / (x.max() - x.min())
+            )
+        elif method == "zscore":
+            df_norm[numeric_cols] = df_norm[numeric_cols].apply(
+                lambda x: (x - x.mean()) / x.std(ddof=0)
+            )
+        return df_norm
